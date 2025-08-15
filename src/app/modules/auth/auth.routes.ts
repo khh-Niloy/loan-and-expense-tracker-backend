@@ -1,9 +1,12 @@
-// import { Router } from "express";
+import { Router } from "express";
+import { authController } from "./auth.controller";
+import { zodValidate } from "../../middleware/zodValidate";
+import { authLoginSchema } from "./auth.validation";
 
-// export const authRoutes = Router();
+export const authRoutes = Router();
 
-// authRoutes.post("/login", authController.userLogin);
+authRoutes.post("/login", zodValidate(authLoginSchema), authController.userLogin);
 
-// authRoutes.post("/refresh-token", authController.getNewAccessToken);
+authRoutes.post("/refresh-token", authController.getNewAccessToken);
 
-// authRoutes.post("/logout", authController.userLogOut);
+authRoutes.post("/logout", authController.userLogOut);

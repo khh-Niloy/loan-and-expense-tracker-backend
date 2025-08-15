@@ -15,6 +15,6 @@ export const createAccessAndRefreshToken = (
   return {accessToken, refreshToken};
 };
 
-export const verifyToken = (accessToken: string, jwtSecret: string) => {
-    return jwt.verify(accessToken, jwtSecret);
+export const verifyToken = (token: string, jwtSecret: string) => {
+    return jwt.verify(token, jwtSecret);
 };
