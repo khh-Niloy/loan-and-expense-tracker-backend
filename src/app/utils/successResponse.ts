@@ -11,6 +11,7 @@ interface TResponse<T> {
 export const successResponse = <T>(res: Response, data: TResponse<T>) => {
     res.status(data.status as number).json({
         success: true,
+        status: data.status,
         message: data.message,
         metaData: data.metaData,
         data: data.data

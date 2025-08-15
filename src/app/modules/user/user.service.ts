@@ -1,39 +1,40 @@
-// // import { Payable } from "../payable/payable.model";
-// import { generateToken } from "../../utils/jwt";
-// import { IUser } from "./user.interface"
-// import { User } from "./user.model";
+import { envVars } from "../../config/env";
+import { createAccessAndRefreshToken } from "../../utils/jwt";
+import { IUser } from "./user.interface";
+import { User } from "./user.model";
+import bcryptjs from "bcryptjs";
 
-// const createUserService = async(payload: Partial<IUser>)=>{
-//     if(!payload.name){
-//         throw new Error("can not register user without name");
-//     }
-//     if(!payload.phoneNumber){
-//         throw new Error("can not register user without phone number");
-//     }
-//     const isPhoneNumberAlreadyExist = await User.findOne({phoneNumber: payload.phoneNumber})
+const createUserService = async (playLoad: Partial<IUser>) => {
+  const { email, password, ...rest } = playLoad;
 
-//     // const token = generateToken(payload)
+  const isUserExist = await User.findOne({ email });
+  if (isUserExist) {
+    throw new Error("User already exist");
+  }
 
-//     if(!isPhoneNumberAlreadyExist){
-//         const person = await User.create(payload)
-//         return {person, token}
-//     }
+  const hashedPassword = await bcryptjs.hash(
+    password as string,
+    parseInt(envVars.BCRYPT_SALT_ROUND)
+  );
 
-//     const userName = await User.findOne({phoneNumber: payload.phoneNumber})
+  const newCreatedUser = await User.create({
+    email,
+    password: hashedPassword,
+    credits: 7,
+    ...rest,
+  });
 
-//     const person = {
-//         name: userName?.name,
-//         phoneNumber: userName?.phoneNumber
-//     }
+  const jwtPayload = {
+    userId: newCreatedUser._id,
+    userEmail: email,
+    phoneNumber: playLoad.phoneNumber
+  }
 
-//     if(userName?.name !== payload.name){
-//         await User.findOneAndUpdate({phoneNumber: payload.phoneNumber}, {name: payload.name})
-//         await Payable.updateMany({"loanGiver_Info.phoneNumber": payload.phoneNumber}, {$set: {"loanGiver_Info.name": payload.name}}, {new: true})
-//     }
-//     console.log({person, token})
-//     return {person, token}
-// }
+  const {accessToken, refreshToken} = createAccessAndRefreshToken(jwtPayload)
 
-// export const userServices = {
-//     createUserService,
-// }
+  return {accessToken, refreshToken, newCreatedUser};
+};
+
+export const userServices = {
+    createUserService,
+}

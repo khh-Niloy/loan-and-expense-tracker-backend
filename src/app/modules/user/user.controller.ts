@@ -1,36 +1,26 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { userServices } from "./user.service"
+import { successResponse } from "../../utils/successResponse";
+import { setCookie } from "../../utils/setCookie";
 
+const createUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const {accessToken, refreshToken, newCreatedUser} = await userServices.createUserService(req.body);
 
-const createUser = async(req: Request, res: Response)=>{
-    try {
-        const result = await userServices.createUserService(req.body);
+    setCookie(res, accessToken, refreshToken);
 
-        if (!result) {
-            return res.status(400).json({
-                success: false,
-                message: "User creation failed"
-            });
-        }
-
-        res.cookie("accessToken", result.token, {
-  httpOnly: false,
-  secure: false,
-  sameSite: 'lax', // or 'none' + HTTPS for cross-domain
-});
-
-
-        res.status(201).json({
-            message: "user created",
-            data: result
-        });
-    } catch (error) {
-        res.status(400).json({
-      success: false,
-      message: (error as Error).message,
+    successResponse(res, {
+      status: 201,
+      success: true,
+      message: "user created",
+      data: newCreatedUser,
     });
-    }
-}
+  } catch (err) {
+    console.log(err);
+    // next(err);
+  }
+};
+
 
 export const userController = {
     createUser,

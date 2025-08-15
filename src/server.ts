@@ -1,6 +1,6 @@
 import { app } from "./app"
 import mongoose from "mongoose";
-import { envVars } from "./app/config/envVars";
+import { envVars } from "./app/config/env";
 
 const startServer = async()=>{
     await mongoose.connect(envVars.MONGO_URI);
