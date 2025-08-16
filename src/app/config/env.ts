@@ -11,6 +11,11 @@ interface IEnvVars {
   JWT_REFRESH_EXPIRES: string;
   BCRYPT_SALT_ROUND: string;
   FRONTEND_URL: string;
+  SMTP_HOST: string;
+  SMTP_PORT: string;
+  SMTP_USER: string;
+  SMTP_FROM: string;
+  SMTP_PASS: string;
 }
 
 const loadEnvVars = (): IEnvVars => {
@@ -24,6 +29,11 @@ const loadEnvVars = (): IEnvVars => {
     "JWT_REFRESH_EXPIRES",
     "BCRYPT_SALT_ROUND",
     "FRONTEND_URL",
+    "SMTP_HOST",
+    "SMTP_PORT",
+    "SMTP_USER",
+    "SMTP_FROM",
+    "SMTP_PASS",
   ];
   requiredEnvVar.forEach((key) => {
     if (!process.env[key]) {
@@ -40,6 +50,11 @@ const loadEnvVars = (): IEnvVars => {
     JWT_REFRESH_EXPIRES: process.env.JWT_REFRESH_EXPIRES as string,
     BCRYPT_SALT_ROUND: process.env.BCRYPT_SALT_ROUND as string,
     FRONTEND_URL: process.env.FRONTEND_URL as string,
+    SMTP_HOST: process.env.SMTP_HOST as string,
+    SMTP_PORT: process.env.SMTP_PORT as string,
+    SMTP_USER: process.env.SMTP_USER as string,
+    SMTP_FROM: process.env.SMTP_FROM as string,
+    SMTP_PASS: process.env.SMTP_PASS as string,
   };
 };
 

@@ -1,61 +1,53 @@
 import { z } from "zod";
 
-export const userCreateZodSchema = z.object({
-  name: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters long." })
-    .max(50, { message: "Name cannot exceed 50 characters." }),
+const nameSchema = z
+  .string()
+  .min(1, "Name is required")
+  .min(2, "Name must be at least 2 characters long")
+  .max(50, "Name cannot exceed 50 characters")
+  .regex(/^[a-zA-Z\s'-]+$/, "Name can only contain letters, spaces, hyphens, and apostrophes");
 
-  email: z
-    .email()
-    .min(5, { message: "Email must be at least 5 characters long." })
-    .max(100, { message: "Email cannot exceed 100 characters." })
-    .refine((val) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
-      message: "Invalid email address format.",
-    }),
+const emailSchema = z
+  .email("Please provide a valid email address")
+  .min(1, "Email is required")
+  .max(100, "Email cannot exceed 100 characters")
+  .transform(val => val.toLowerCase());
 
-  password: z
-    .string()
-    .min(5, { message: "Password must be at least 5 characters long." })
-    // .regex(/^(?=.*[A-Z])/, {
-    //   message: "Password must contain at least 1 uppercase letter.",
-    // })
-    // .regex(/^(?=.*[!@#$%^&*])/, {
-    //   message: "Password must contain at least 1 special character.",
-    // })
+const passwordSchema = z
+  .string()
+  .min(1, "Password is required")
+  .min(5, "Password must be at least 5 characters long")
+  .max(100, "Password cannot exceed 100 characters")
+  .regex(/^(?=.*[A-Z])/, {
+      message: "Password must contain at least 1 uppercase letter.",
+    })
+    .regex(/^(?=.*[!@#$%^&*])/, {
+      message: "Password must contain at least 1 special character.",
+    })
     .regex(/^(?=.*\d)/, {
       message: "Password must contain at least 1 number.",
-    }),
+    })
 
-  phoneNumber: z
+const phoneSchema = z
   .string()
-  .regex(/^01\d{9}$/, {
-    message: "Phone number must start with 01 and be 11 digits long.",
-  })
+  .min(1, "Phone number is required")
+  .regex(/^\+?[1-9]\d{1,14}$/, "Please provide a valid phone number (E.164 format recommended)");
+
+export const userCreateZodSchema = z.object({
+  name: nameSchema,
+  email: emailSchema,
+  password: passwordSchema,
+  phoneNumber: phoneSchema
 });
 
-// export const udpateUserZodSchema = z.object({
-//   name: z
-//     .string({ invalid_type_error: "Name must be string" })
-//     .min(2, { message: "Name must be at least 2 characters long." })
-//     .max(50, { message: "Name cannot exceed 50 characters." }).optional(),
-//   phone: z
-//     .string({ invalid_type_error: "Phone Number must be string" })
-//     .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
-//       message:
-//         "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
-//     })
-//     .optional(),
+// export const userUpdateZodSchema = z.object({
+//   name: nameSchema.optional(),
+//   email: emailSchema.optional(),
+//   phoneNumber: phoneSchema.optional(),
 //   address: z
-//     .string({ invalid_type_error: "Address must be string" })
-//     .max(200, { message: "Address cannot exceed 200 characters." })
+//     .string()
+//     .max(200, "Address cannot exceed 200 characters")
 //     .optional(),
-//   role: z.enum(Object.values(Role) as [string]).optional(),
-//   isDeleted: z
-//     .boolean({ invalid_type_error: "isDeleted must be true or false" })
-//     .optional(),
-//   isVerified: z
-//     .boolean({ invalid_type_error: "isVerified must be true or false" })
-//     .optional(),
-//   isActive: z.enum(Object.values(isActive) as [string]).optional(),
-// });
+//   isActive: z.boolean().optional(),
+//   isVerified: z.boolean().optional()
+// }).strict();

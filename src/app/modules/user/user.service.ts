@@ -1,5 +1,5 @@
 import { envVars } from "../../config/env";
-import { createAccessAndRefreshToken } from "../../utils/jwt";
+import { createAccessAndRefreshToken, jwtPayloadFunc } from "../../utils/jwt";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
 import bcryptjs from "bcryptjs";
@@ -20,15 +20,10 @@ const createUserService = async (playLoad: Partial<IUser>) => {
   const newCreatedUser = await User.create({
     email,
     password: hashedPassword,
-    credits: 7,
     ...rest,
   });
 
-  const jwtPayload = {
-    userId: newCreatedUser._id,
-    userEmail: email,
-    phoneNumber: playLoad.phoneNumber
-  }
+  const jwtPayload = jwtPayloadFunc(newCreatedUser._id, email as string, playLoad.phoneNumber as string)
 
   const {accessToken, refreshToken} = createAccessAndRefreshToken(jwtPayload)
 

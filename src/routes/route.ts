@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { userRoutes } from "../app/modules/user/user.routes";
-import { transactionRoutes } from "../app/modules/transaction/transaction.routes";
 import { authRoutes } from "../app/modules/auth/auth.routes";
+import { loanRoutes } from "../app/modules/loan/loan.routes";
+import { expenseRoutes } from "../app/modules/expense/expense.routes";
 
 export const routes = Router();
 
@@ -15,8 +16,12 @@ const allRoutes = [
     route: authRoutes,
   },
   {
-    path: "/transaction",
-    route: transactionRoutes,
+    path: "/loan",
+    route: loanRoutes,
+  },
+  {
+    path: "/expense",
+    route: expenseRoutes,
   },
 ];
 

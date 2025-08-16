@@ -1,7 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IUser } from "./user.interface";
 
-// Enum mapping for Mongoose
 const userStatusEnum = ["ACTIVE", "INACTIVE"] as const;
 
 const userSchema = new Schema<IUser>({
@@ -30,7 +29,7 @@ const userSchema = new Schema<IUser>({
     required: [true, "Phone number is required"],
     unique: true,
     trim: true,
-    match: [/^01\d{9}$/, "Invalid Bangladeshi phone number"], // E.164 format
+    match: [/^01\d{9}$/, "Invalid Bangladeshi phone number"],
   },
   isBlocked: {
     type: Boolean,
@@ -47,7 +46,7 @@ const userSchema = new Schema<IUser>({
   },
   credits: {
     type: Number,
-    default: 0,
+    default: 7,
     min: [0, "Credits cannot be negative"],
   },
 }, { 

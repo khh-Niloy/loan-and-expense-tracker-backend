@@ -76,35 +76,80 @@ const userLogOut = async (req: Request, res: Response) => {
   }
 };
 
-// const changePassword = async (req: Request, res: Response) => {
-//   try {
-//     const { oldPassword, newPassword } = req.body;
-//     const payload = req.user;
+const changePassword = async (req: Request, res: Response) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const payload = req.user;
 
-//     await authService.changePassword(
-//       oldPassword,
-//       newPassword,
-//       payload as JwtPayload
-//     );
+    await authService.changePassword(
+      oldPassword,
+      newPassword,
+      payload as JwtPayload
+    );
 
-//     successResponse(res, {
-//       statusCode: 201,
-//       success: true,
-//       message: "password updated",
-//       data: null,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(400).json({
-//       success: false,
-//       message: (error as Error).message,
-//     });
-//   }
-// };
+    successResponse(res, {
+      status: 201,
+      success: true,
+      message: "password updated",
+      data: null,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      success: false,
+      message: (error as Error).message,
+    });
+  }
+};
+
+
+const forgetPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    await authService.forgetPasswordService(email);
+
+    successResponse(res, {
+      status: 200,
+      success: true,
+      message: "email sent",
+      data: null,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      success: false,
+      message: (error as Error).message,
+    });
+  }
+};
+
+const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const {id, password} = req.body
+    const userInfo = req.user
+    await authService.resetPasswordService(id, password, userInfo as JwtPayload);
+
+    successResponse(res, {
+      status: 201,
+      success: true,
+      message: "password reset and updated",
+      data: null,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      success: false,
+      message: (error as Error).message,
+    });
+  }
+};
+
 
 export const authController = {
   userLogin,
   getNewAccessToken,
   userLogOut,
-//   changePassword
+  changePassword,
+  forgetPassword,
+  resetPassword
 };

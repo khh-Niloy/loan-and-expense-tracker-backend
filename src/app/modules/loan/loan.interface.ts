@@ -9,7 +9,7 @@ export interface IOwnNotes {
   date: Date
 }
 
-export interface ITransaction {
+export interface ILoan {
   loanTaker_number: string,
   loanGiver_number: string,
   loanTaker_name: string,
@@ -20,5 +20,5 @@ export interface ITransaction {
   ownNotes?: IOwnNotes[]  // * need to send notification/email + full conversation 
   loanPayDate?: Date // * need to send phone message or email
   transactionId: string;
-  // loanCategory?: string
+  loanCategory?: string
 }

@@ -1,6 +1,15 @@
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 import { envVars } from "../config/env";
 
+export const jwtPayloadFunc = (id: string, email: string, phoneNumber: string)=>{
+  const jwtPayload = {
+    userId: id,
+    email: email,
+    phoneNumber: phoneNumber
+  }
+  return jwtPayload
+}
+
 export const createAccessAndRefreshToken = (
   jwtPayload: JwtPayload,
 ) => {
