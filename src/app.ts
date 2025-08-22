@@ -15,3 +15,12 @@ app.use("/api/v1", routes)
 app.get("/", (req, res)=>{
     res.send("welcome to loan and express tracker backend")
 })
+
+
+
+/*
+
+total loan taken -> each month also 
+total pending loan -> also show category based loans
+
+*/

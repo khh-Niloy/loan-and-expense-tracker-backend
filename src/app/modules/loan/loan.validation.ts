@@ -17,3 +17,8 @@ export const createLoanSchema = z.object({
   ownNotes: z.string().optional(),
   loanPayDate: z.preprocess((val) => (val ? new Date(val as string) : undefined), z.date()).optional(),
 });
+
+export const updateLoanSchema = z.object({
+  amount: z.number().nonnegative("Amount must be 0 or greater"),
+  note: z.string().optional(),
+}); 

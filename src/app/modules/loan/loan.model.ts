@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
-import { INotes, IOwnNotes, ILoan } from "./loan.interface";
+import { ITransactionNotes, IOwnNotes, ILoan } from "./loan.interface";
 
-const noteSchema = new Schema<INotes>({
+const noteSchema = new Schema<ITransactionNotes>({
   noteMessage: { type: String, required: true },
   amount: { type: Number, required: true },
   date: { type: Date, required: true }
@@ -23,7 +23,9 @@ const loanSchema = new Schema<ILoan>({
   ownNotes: { type: [ownNoteSchema], default: [] },
   loanPayDate: { type: Date },
   transactionId: { type: String, required: true },
-  loanCategory: { type: String }
+  loanCategory: { type: String },
+  paidAmount: { type: Number, default: 0 },
+  remainingAmount: { type: Number, default: 0 }
 }, { timestamps: true, versionKey: false });
 
 export const Loan = model<ILoan>("Loan", loanSchema);

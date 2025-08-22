@@ -1,4 +1,4 @@
-import { ILoan, INotes, IOwnNotes } from './loan.interface';
+import { ILoan, ITransactionNotes, updateDoc } from './loan.interface';
 import { getTransactionId } from '../../utils/getTransactionId';
 import { Loan } from './loan.model';
 
@@ -66,30 +66,42 @@ const updateLoanServices = async(payload: {amount: number, note: string}, transa
     const loanRecord = await Loan.findOne({transactionId: transactionId})
     const amount = payload.amount
 
-    // console.log(payload)
-    // console.log(isFullPay)
-
     if(!loanRecord){
         throw new Error("transactionId did not match and transaction not found");
     }
 
-    const noteEntry: INotes = {
+    const noteEntry: ITransactionNotes = {
     noteMessage: isFullPay ? "Full paid" : payload.note || "",
     amount,
     date: new Date(),
-  };
+    };
 
     if(amount > loanRecord.amount){
-        throw new Error(`deu loan is ${loanRecord.amount}. enter amount less than ${loanRecord.amount}`);
+        throw new Error(`deu loan is ${loanRecord.amount}. enter amount less than       
+        ${loanRecord.amount}`);
     }
 
-    const updateDoc: { $inc: { amount: number }; $push?: { notes: INotes } } = { $inc: { amount: -amount } };
+    let paidAmount = 0
+    let remainingAmount = 0
+
+    if(isFullPay){
+        paidAmount = loanRecord.amount
+        remainingAmount = 0
+    }
+    paidAmount = loanRecord.paidAmount || 0 + amount
+    remainingAmount = loanRecord.amount - paidAmount
+
+
+    const updateDoc: updateDoc = 
+     { $inc: { amount: -amount }, $set: { paidAmount: paidAmount, remainingAmount: remainingAmount } 
+    };
     
     updateDoc.$push = {
-        notes: noteEntry
+        transactionNotes : noteEntry
     }
     
-    const updateLoan = await Loan.findOneAndUpdate({transactionId: transactionId}, updateDoc, {new: true})
+    const updateLoan = await Loan.findOneAndUpdate({transactionId: transactionId}, updateDoc, {new: 
+         true})
 
     return updateLoan
 }

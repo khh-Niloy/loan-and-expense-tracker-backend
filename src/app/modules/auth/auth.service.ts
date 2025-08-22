@@ -134,7 +134,7 @@ const forgetPasswordService = async (email: string) => {
 
 const resetPasswordService = async (id: string, password: string, userInfo: JwtPayload) => {
 
-  if(id === userInfo.userId){
+  if(id !== userInfo.userId){
     throw new Error("user id does not match");
   }
 
