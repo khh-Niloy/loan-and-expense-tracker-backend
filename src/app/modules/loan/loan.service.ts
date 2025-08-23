@@ -33,6 +33,7 @@ const createLoanService = async(payload: Partial<ILoan>)=>{
 
     const newLoanInfo = {
         transactionId: createTransactionId,
+        remainingAmount: payload.amount,
         ...payload
     }
 

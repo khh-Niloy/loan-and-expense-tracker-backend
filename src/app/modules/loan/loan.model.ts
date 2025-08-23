@@ -25,7 +25,7 @@ const loanSchema = new Schema<ILoan>({
   transactionId: { type: String, required: true },
   loanCategory: { type: String },
   paidAmount: { type: Number, default: 0 },
-  remainingAmount: { type: Number, default: 0 }
+  remainingAmount: { type: Number }
 }, { timestamps: true, versionKey: false });
 
 export const Loan = model<ILoan>("Loan", loanSchema);

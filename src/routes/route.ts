@@ -3,6 +3,7 @@ import { userRoutes } from "../app/modules/user/user.routes";
 import { authRoutes } from "../app/modules/auth/auth.routes";
 import { loanRoutes } from "../app/modules/loan/loan.routes";
 import { expenseRoutes } from "../app/modules/expense/expense.routes";
+import { statsRoutes } from "../app/modules/stats/stats.routes";
 
 export const routes = Router();
 
@@ -22,6 +23,10 @@ const allRoutes = [
   {
     path: "/expense",
     route: expenseRoutes,
+  },
+  {
+    path: "/stats",
+    route: statsRoutes,
   },
 ];
 

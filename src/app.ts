@@ -17,10 +17,5 @@ app.get("/", (req, res)=>{
 })
 
 
-
-/*
-
-total loan taken -> each month also 
-total pending loan -> also show category based loans
-
-*/
+// montly total loan
+// all loan pay date show
