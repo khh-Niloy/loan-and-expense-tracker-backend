@@ -15,7 +15,3 @@ app.use("/api/v1", routes)
 app.get("/", (req, res)=>{
     res.send("welcome to loan and express tracker backend")
 })
-
-
-// montly total loan
-// all loan pay date show

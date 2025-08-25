@@ -4,4 +4,4 @@ import { statsController } from "./stats.controller";
 export const statsRoutes = Router();
 
 // GET /stats/category-loan/:phoneNumber
-statsRoutes.get("/category-loan/:phoneNumber", statsController.getCategoryLoanStats);
+statsRoutes.get("/loan-stats/:phoneNumber", statsController.getCategoryLoanStats);

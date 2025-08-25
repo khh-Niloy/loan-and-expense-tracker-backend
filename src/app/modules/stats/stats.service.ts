@@ -51,7 +51,56 @@ const categoryWithUserLoanList = async (phoneNumber: string) => {
         }
     ])
 
-    return {categoryBasedLoanPending, userBasedLoanPending}
+    const monthlyLoanTaken = await Loan.aggregate([
+        {
+            $group: {
+                _id: {
+                    month: {
+                      $dateToString: { format: "%Y-%m", date: { $toDate: "$createdAt" } }
+                    }
+                  },
+                totalAmount: {$sum: "$amount"},
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                monthName: {
+                    $dateToString: { format: "%B", date: { $toDate: "$_id.month" } }
+                  },
+                totalAmount: 1
+            }
+        }
+    ])
+
+    const loanPayDates = await Loan.aggregate([
+        {
+          $match: { loanPayDate: { $exists: true } } // only docs with loanPayDate
+        },
+        {
+          $project: {
+            loanPayDate: 1,
+            loanGiver_number: 1,
+            loanGiver_name: 1,
+            remainingAmount: 1,
+            payLoanDaysLeft: {
+                $max: [
+                  0,
+                  {
+                    $floor: {
+                      $divide: [
+                        { $subtract: [{ $toDate: "$loanPayDate" }, new Date()] },
+                        1000 * 60 * 60 * 24
+                      ]
+                    }
+                  }
+                ]
+              }
+          }
+        }
+      ]);
+
+    return {categoryBasedLoanPending, userBasedLoanPending, monthlyLoanTaken, loanPayDates}
 }
 
 export const statsService = {
