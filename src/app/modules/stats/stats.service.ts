@@ -75,7 +75,7 @@ const categoryWithUserLoanList = async (phoneNumber: string) => {
 
     const loanPayDates = await Loan.aggregate([
         {
-          $match: { loanPayDate: { $exists: true } } // only docs with loanPayDate
+          $match: { loanPayDate: { $exists: true } }
         },
         {
           $project: {
@@ -103,6 +103,18 @@ const categoryWithUserLoanList = async (phoneNumber: string) => {
     return {categoryBasedLoanPending, userBasedLoanPending, monthlyLoanTaken, loanPayDates}
 }
 
+const expenseStatsService = async(phoneNumber: string)=>{
+
+    const user = await User.findOne({phoneNumber})
+
+    if(!user) {
+        throw new Error("User not found")
+    }
+
+    
+}
+
 export const statsService = {
-    categoryWithUserLoanList
+    categoryWithUserLoanList,
+    expenseStatsService
 }

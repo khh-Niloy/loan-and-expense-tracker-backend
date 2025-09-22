@@ -32,7 +32,7 @@ const createExpenseService = async(payload: Partial<IExpense>)=>{
 
 const expenseListServices = async(phoneNumber: string, query: Record<string, string>)=>{
     const filter = query
-    console.log(filter)
+    console.log(phoneNumber)
     const searchValue = query.searchTerm || ""
     const searchArr = ["reason", "expenseCategory"]
 
@@ -45,7 +45,7 @@ const expenseListServices = async(phoneNumber: string, query: Record<string, str
     }
 
     const expenseList = await Expense.find({phoneNumber: phoneNumber}).find({expenseCategory: query.filter}).find(search)
-    console.log(expenseList)
+    // console.log(expenseList)
     const total = expenseList.reduce((prev, curr)=> prev + curr.amount, 0)
     return {expenseList, total}
 }

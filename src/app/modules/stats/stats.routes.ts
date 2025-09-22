@@ -5,3 +5,4 @@ export const statsRoutes = Router();
 
 // GET /stats/category-loan/:phoneNumber
 statsRoutes.get("/loan-stats/:phoneNumber", statsController.getCategoryLoanStats);
+statsRoutes.get("/expense-stats/:phoneNumber", statsController.getExpenseStats);
